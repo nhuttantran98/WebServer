@@ -64,3 +64,7 @@ passport.deserializeUser(function(name,done){
         }
     })
 });
+
+app.get("/signUp",function(req,res){
+    res.render("signUp.ejs")
+})
