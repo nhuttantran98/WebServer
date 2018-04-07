@@ -30,12 +30,6 @@ app.get("/login", function (req, res) {
 
 app.post("/login", passport.authenticate("local", { failureRedirect: "/login", successRedirect: "/loginSuccess" }))
 
-/*app.route("/login")
-.get(function(req,res){
-    res.render("login.ejs")
-})
-.post(passport.authenticate("local",{failureRedirect:"/login",successRedirect:"/loginSuccess"}));*/
-
 passport.use(new localStrategy(function(username,password,done){
     fs.readFile('./userdb.json',(err,data) => {
         const db=JSON.parse(data)
