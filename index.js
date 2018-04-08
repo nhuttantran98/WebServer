@@ -82,7 +82,6 @@ passport.deserializeUser(function(name,done){
 });
 
 app.post("/signUp",urlencodedParser,function(req,res){
-    
 
     pool.connect((err, client, done) => {
         if (err)  {
