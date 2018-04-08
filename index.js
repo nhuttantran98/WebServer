@@ -5,10 +5,26 @@ const passport=require("passport")
 const localStrategy=require("passport-local").Strategy
 const fs=require("fs")
 const session=require("express-session")
+const pg=require("pg")
 
-app.use( express.static( "public" ) );
+
+var config = {
+    user: 'postgres',
+    password: 'chuyentien1307',
+    host: 'localhost',
+    port: 5432,
+    database: 'myDataUser',
+    ssl: false,
+    idleTimeoutMillis:30000
+  }
+
+  var pool=new pg.Pool(config)
+
+  var urlencodedParser = bodyParser.urlencoded({ extended: true })
+
+app.use( express.static( "public" ) )
 app.use(session({secret:"mysecret"}))
-app.use(bodyParser.urlencoded({extended:true}))
+app.use(urlencodedParser)
 app.use(passport.initialize())
 app.use(passport.session())
 
@@ -64,6 +80,30 @@ passport.deserializeUser(function(name,done){
         }
     })
 });
+
+app.post("/signUp",urlencodedParser,function(req,res){
+    
+
+    pool.connect((err, client, done) => {
+        if (err)  {
+            return console.error('error fetching client from pool', err);
+        }
+        var username=req.body.usernameSign;
+        var password=req.body.passwordSign;
+
+        const text = 'INSERT INTO "myDataUser"(username, password) VALUES($1, $2)';
+        const values =[ username, password];
+       
+        client.query(text,values, (err, result) => {
+          done();
+
+          if (err) {
+            return console.error('error running query', err);
+          }
+        res.render("signUpSuccess.ejs");
+        })
+      })
+})
 
 app.get("/signUp",function(req,res){
     res.render("signUp.ejs")
