@@ -16,13 +16,13 @@ db.authenticate()
 .then(()=>console.log("ket noi thanh cong"))
 .catch(err=>console.log(err.message))
 
-const Users=db.define("User",{
+const Users=db.define("DataUser",{
     username:sequelize.STRING,
     password: sequelize.STRING
 })
 
-db.sync()
-.then(()=>console.log("tao model"))
+/*db.sync()
+.then(()=>console.log("tao model"))*/
 
 
 module.exports=Users
